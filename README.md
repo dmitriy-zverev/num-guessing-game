@@ -146,3 +146,5 @@ Feel free to fork this repository and submit pull requests for any improvements 
 ## License
 
 This project is open source and available under no license.
+
+Inspired by [roadmap.sh](https://roadmap.sh/projects/number-guessing-game)
