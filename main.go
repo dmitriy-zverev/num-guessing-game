@@ -36,6 +36,7 @@ func initGame() int {
 func startGameLoop(difficulty int) {
 	randNum := rand.Intn(MAX_RAND_NUMBER) + 1
 	chances := difficultyToChances(difficulty)
+	hintGiven := false
 
 	var userNum int
 
@@ -52,6 +53,10 @@ func startGameLoop(difficulty int) {
 		if checkIfWon(userNum, randNum, i) {
 			printElapsedTime(start)
 			return
+		}
+
+		if !hintGiven {
+			hintGiven = giveHint(randNum, difficulty, i+1)
 		}
 	}
 
@@ -70,13 +75,31 @@ func endGame() {
 		startGameLoop(difficulty)
 	}
 
-	fmt.Print("\nOk. It was nice to see you. Bye.")
+	fmt.Print("\nOk. It was nice to see you. Bye.\n")
 	os.Exit(0)
 }
 
 func printElapsedTime(start time.Time) {
 	elapsed := time.Since(start)
 	fmt.Printf("\nYou have guessed in %.2f seconds\n", elapsed.Seconds())
+}
+
+func giveHint(correctNum, difficulty, attempts int) bool {
+	if difficulty < 3 && attempts > 3 {
+		switch rand.Intn(2) {
+		case 0:
+			fmt.Printf("Hint: the number ends with %d\n", correctNum%10)
+			return true
+		case 1:
+			if correctNum == 100 {
+				fmt.Printf("Hint: the number starts with 1\n")
+			}
+			fmt.Printf("Hint: the number starts with %d\n", (correctNum-correctNum%10)/10)
+			return true
+		}
+	}
+
+	return false
 }
 
 func checkIfWon(userInput, correctNum, attempt int) bool {
