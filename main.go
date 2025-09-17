@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"time"
 )
 
 func main() {
@@ -37,6 +38,8 @@ func startGameLoop(difficulty int) {
 	chances := difficultyToChances(difficulty)
 
 	var userNum int
+
+	start := time.Now()
 	for i := 0; i < chances; i++ {
 		fmt.Printf("\n%d. Enter your guess: ", i+1)
 		fmt.Scan(&userNum)
@@ -47,6 +50,7 @@ func startGameLoop(difficulty int) {
 		}
 
 		if checkIfWon(userNum, randNum, i) {
+			printElapsedTime(start)
 			return
 		}
 	}
@@ -68,6 +72,11 @@ func endGame() {
 
 	fmt.Print("\nOk. It was nice to see you. Bye.")
 	os.Exit(0)
+}
+
+func printElapsedTime(start time.Time) {
+	elapsed := time.Since(start)
+	fmt.Printf("\nYou have guessed in %.2f seconds\n", elapsed.Seconds())
 }
 
 func checkIfWon(userInput, correctNum, attempt int) bool {
